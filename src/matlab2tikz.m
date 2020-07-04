@@ -2347,7 +2347,10 @@ function [m2t, str] = drawPatch(m2t, handle, custom)
 
     % No patch: if one patch and single face/edge color
     isFaceColorFlat = isempty(strfind(opts_get(patchOptions, 'shader'),'interp'));
-    if size(Faces,1) == 1 && s.hasOneEdgeColor && isFaceColorFlat
+    if size(Faces,1) == 0 % Patch is empty
+        return; 
+    
+    elseif size(Faces,1) == 1 && s.hasOneEdgeColor && isFaceColorFlat % Single patch
         ptType = '';
         cycle  = conditionallyCyclePath(Vertices);
 
