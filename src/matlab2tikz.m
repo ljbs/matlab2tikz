@@ -1840,6 +1840,11 @@ end
 function [m2t, str] = writePlotData(m2t, data, drawOptions)
     % actually writes the plot data to file
     str = '';
+    
+    % Don't try to parse anything if there isn't anything
+    if (size(data,1)==0)
+        return; 
+    end
 
     is3D = m2t.axes{end}.is3D;
     if is3D
