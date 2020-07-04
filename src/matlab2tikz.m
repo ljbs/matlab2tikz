@@ -709,6 +709,19 @@ function [m2t, pgfEnvironments] = handleAllChildren(m2t, h)
 
             case 'rectangle'
                 [m2t, str] = handleObject(m2t, child, @drawRectangle);
+                
+            case 'polygon'                
+                % Convert polygon to patch
+                polygons = {child.Shape.regions.Vertices};
+                s = max(cellfun(@length, polygons)); 
+                X = NaN*ones(s,length(polygons)); Y = X; 
+                for i=1:length(polygons)
+                    X(1:size(polygons{i},1),i) = polygons{i}(:,1);
+                    Y(1:size(polygons{i},1),i) = polygons{i}(:,2);
+                end
+                p = patch('XData',X,'YData',Y,'FaceColor',child.FaceColor,'FaceAlpha',child.FaceAlpha,'EdgeColor',child.EdgeColor,'LineStyle',child.LineStyle,'LineWidth',child.LineWidth);
+                child = p; 
+                [m2t, str] = handleObject(m2t, child, @drawPatch);
 
             case 'histogram'
                 [m2t, str] = handleObject(m2t, child, @drawHistogram);
